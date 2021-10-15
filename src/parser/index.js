@@ -10,7 +10,7 @@ const _ = require("lodash");
 function assignOpts(options) {
   options = _.extend(
     {
-      headerPattern: /^(\w*)(?:\(([\w$.\-*/ ]*)\))?:(.*)$/,
+      headerPattern: /^(\w*)(?:\(([\w$.\-*/ ]*)\))?:\s?(.*)$/,
       headerCorrespondence: ["type", "scope", "subject"],
       referenceActions: [
         "close",
