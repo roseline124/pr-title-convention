@@ -1,17 +1,17 @@
-const conventionalCommitsConfig = require('conventional-changelog-conventionalcommits');
-const conventionalCommitTypes = require('conventional-commit-types');
-const parser = require('conventional-commits-parser').sync;
-const formatMessage = require('./formatMessage');
+const conventionalCommitsConfig = require("conventional-changelog-conventionalcommits");
+const conventionalCommitTypes = require("conventional-commit-types");
+const parser = require("./parser").sync;
+const formatMessage = require("./formatMessage");
 
 const defaultTypes = Object.keys(conventionalCommitTypes.types);
 
 module.exports = async function validatePrTitle(
   prTitle,
-  {types, scopes, requireScope, subjectPattern, subjectPatternError} = {}
+  { types, scopes, requireScope, subjectPattern, subjectPatternError } = {}
 ) {
   if (!types) types = defaultTypes;
 
-  const {parserOpts} = await conventionalCommitsConfig();
+  const { parserOpts } = await conventionalCommitsConfig();
   const result = parser(prTitle, parserOpts);
 
   function printAvailableTypes() {
@@ -25,7 +25,7 @@ module.exports = async function validatePrTitle(
 
         return bullet;
       })
-      .join('\n')}`;
+      .join("\n")}`;
   }
 
   function isUnknownScope(s) {
@@ -53,24 +53,24 @@ module.exports = async function validatePrTitle(
   if (requireScope && !result.scope) {
     let msg = `No scope found in pull request title "${prTitle}".`;
     if (scopes) {
-      msg += ` Use one of the available scopes: ${scopes.join(', ')}.`;
+      msg += ` Use one of the available scopes: ${scopes.join(", ")}.`;
     }
 
     throw new Error(msg);
   }
 
   const givenScopes = result.scope
-    ? result.scope.split(',').map((scope) => scope.trim())
+    ? result.scope.split(",").map((scope) => scope.trim())
     : undefined;
   const unknownScopes = givenScopes ? givenScopes.filter(isUnknownScope) : [];
   if (scopes && unknownScopes.length > 0) {
     throw new Error(
       `Unknown ${
-        unknownScopes.length > 1 ? 'scopes' : 'scope'
+        unknownScopes.length > 1 ? "scopes" : "scope"
       } "${unknownScopes.join(
-        ','
+        ","
       )}" found in pull request title "${prTitle}". Use one of the available scopes: ${scopes.join(
-        ', '
+        ", "
       )}.`
     );
   }
@@ -79,7 +79,7 @@ module.exports = async function validatePrTitle(
     if (subjectPatternError) {
       message = formatMessage(subjectPatternError, {
         subject: result.subject,
-        title: prTitle
+        title: prTitle,
       });
     }
 
