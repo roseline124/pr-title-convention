@@ -1,18 +1,18 @@
 const ENUM_SPLIT_REGEX = /[,\s]\s*/;
 
-module.exports = {
-  parseEnum(input) {
+export class ConfigParser {
+  static parseEnum(input: string) {
     return input
       .split(ENUM_SPLIT_REGEX)
       .map((part) => part.trim())
       .filter((part) => part.length > 0);
-  },
+  }
 
-  parseBoolean(input) {
+  static parseBoolean(input: string) {
     return JSON.parse(input.trim());
-  },
+  }
 
-  parseString(input) {
+  static parseString(input: string) {
     return input;
-  },
-};
+  }
+}

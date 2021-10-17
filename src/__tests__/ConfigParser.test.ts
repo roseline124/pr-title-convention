@@ -1,4 +1,4 @@
-const ConfigParser = require('./ConfigParser');
+import { ConfigParser } from '../ConfigParser';
 
 describe('parseEnum', () => {
   it('parses commas', () => {
@@ -6,7 +6,7 @@ describe('parseEnum', () => {
       'one',
       'two',
       'three',
-      'four'
+      'four',
     ]);
   });
 
@@ -15,7 +15,7 @@ describe('parseEnum', () => {
       'one',
       'two',
       'three',
-      'four'
+      'four',
     ]);
   });
 });

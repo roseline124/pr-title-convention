@@ -1,4 +1,4 @@
-export function formatMessage(message: string, values: Record<string, any>) {
+export function formatMessage(message: string, values?: Record<string, any>) {
   let formatted = message;
   if (values) {
     Object.entries(values).forEach(([key, value]) => {

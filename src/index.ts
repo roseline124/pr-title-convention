@@ -1,19 +1,23 @@
-const core = require('@actions/core');
-const github = require('@actions/github');
-const parseConfig = require('./parseConfig');
-const validatePrTitle = require('./validatePrTitle');
+import core from '@actions/core';
+import github from '@actions/github';
+import { parseConfig } from './parseConfig';
+import { validatePrTitle } from './validatePrTitle';
 
 module.exports = async function run() {
   try {
-    const client = github.getOctokit(process.env.GITHUB_TOKEN);
+    const githubToken = process.env.GITHUB_TOKEN;
+    if (!githubToken) {
+      throw new Error('Github Token cannot found');
+    }
+
+    const client = github.getOctokit(githubToken);
     const {
       types,
       scopes,
-      requireScope,
       wip,
       subjectPattern,
       subjectPatternError,
-      validateSingleCommit
+      validateSingleCommit,
     } = parseConfig();
 
     const contextPullRequest = github.context.payload.pull_request;
@@ -30,10 +34,10 @@ module.exports = async function run() {
     // the user updates the title and re-runs the workflow, it would
     // be outdated. Therefore fetch the pull request via the REST API
     // to ensure we use the current title.
-    const {data: pullRequest} = await client.pulls.get({
+    const { data: pullRequest } = await client.pulls.get({
       owner,
       repo,
-      pull_number: contextPullRequest.number
+      pull_number: contextPullRequest.number,
     });
 
     // Pull requests that start with "[WIP] " are excluded from the check.
@@ -45,17 +49,16 @@ module.exports = async function run() {
         await validatePrTitle(pullRequest.title, {
           types,
           scopes,
-          requireScope,
           subjectPattern,
-          subjectPatternError
+          subjectPatternError,
         });
 
         if (validateSingleCommit) {
-          const {data: commits} = await client.pulls.listCommits({
+          const { data: commits } = await client.pulls.listCommits({
             owner,
             repo,
             pull_number: contextPullRequest.number,
-            per_page: 2
+            per_page: 2,
           });
 
           if (commits.length === 1) {
@@ -63,9 +66,8 @@ module.exports = async function run() {
               await validatePrTitle(commits[0].commit.message, {
                 types,
                 scopes,
-                requireScope,
                 subjectPattern,
-                subjectPatternError
+                subjectPatternError,
               });
             } catch (error) {
               throw new Error(
@@ -80,8 +82,7 @@ module.exports = async function run() {
     }
 
     if (wip) {
-      const newStatus =
-        isWip || validationError != null ? 'pending' : 'success';
+      const newStatus = isWip || validationError != null ? 'pending' : 'success';
 
       // When setting the status to "pending", the checks don't
       // complete. This can be used for WIP PRs in repositories
@@ -98,14 +99,14 @@ module.exports = async function run() {
           : validationError
           ? 'PR title validation failed'
           : 'Ready for review & merge.',
-        context: 'action-semantic-pull-request'
+        context: 'action-semantic-pull-request',
       });
     }
 
     if (!isWip && validationError) {
       throw validationError;
     }
-  } catch (error) {
+  } catch (error: any) {
     core.setFailed(error.message);
   }
 };

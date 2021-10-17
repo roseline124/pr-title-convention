@@ -22,7 +22,7 @@ See [Conventional Commits](https://www.conventionalcommits.org/) for more exampl
 ## Example config
 
 ```yml
-name: "Lint PR"
+name: 'Lint PR'
 
 on:
   pull_request_target:
@@ -61,7 +61,7 @@ with:
   requireScope: true
   # Configure additional validation for the subject based on a regex.
   # This example ensures the subject doesn't start with an uppercase character.
-  subjectPattern: ^(?![A-Z]).+$
+  subjectPattern: ^(?!\\s?[A-Z]).+$
   # If `subjectPattern` is configured, you can use this property to override
   # the default error message that is shown when the pattern doesn't match.
   # The variables `subject` and `title` can be used within the message.

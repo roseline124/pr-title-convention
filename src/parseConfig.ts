@@ -1,6 +1,6 @@
 const ConfigParser = require('./ConfigParser');
 
-module.exports = function parseConfig() {
+export function parseConfig() {
   let types;
   if (process.env.INPUT_TYPES) {
     types = ConfigParser.parseEnum(process.env.INPUT_TYPES);
@@ -23,9 +23,7 @@ module.exports = function parseConfig() {
 
   let subjectPatternError;
   if (process.env.INPUT_SUBJECTPATTERNERROR) {
-    subjectPatternError = ConfigParser.parseString(
-      process.env.INPUT_SUBJECTPATTERNERROR
-    );
+    subjectPatternError = ConfigParser.parseString(process.env.INPUT_SUBJECTPATTERNERROR);
   }
 
   let wip;
@@ -35,9 +33,7 @@ module.exports = function parseConfig() {
 
   let validateSingleCommit;
   if (process.env.INPUT_VALIDATESINGLECOMMIT) {
-    validateSingleCommit = ConfigParser.parseBoolean(
-      process.env.INPUT_VALIDATESINGLECOMMIT
-    );
+    validateSingleCommit = ConfigParser.parseBoolean(process.env.INPUT_VALIDATESINGLECOMMIT);
   }
 
   return {
@@ -47,6 +43,6 @@ module.exports = function parseConfig() {
     wip,
     subjectPattern,
     subjectPatternError,
-    validateSingleCommit
+    validateSingleCommit,
   };
-};
+}
