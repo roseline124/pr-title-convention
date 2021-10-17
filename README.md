@@ -36,8 +36,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Please look up the latest version from
-      # https://github.com/amannn/action-semantic-pull-request/releases
-      - uses: amannn/action-semantic-pull-request@vX.X.X
+      # https://github.com/roseline124/action-semantic-pull-request/releases
+      - uses: roseline124/action-semantic-pull-request@vX.X.X
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -81,6 +81,11 @@ with:
   # merge commit, and it's easy to commit this by mistake. Enable this option
   # to also validate the commit message for one commit PRs.
   validateSingleCommit: true
+  # choose action the way to validate pr title
+  # you can choose 'comment' | 'autofix'. default is 'comment'
+  # comment: comment on pr when the validation was failed
+  # autofix: automatically fix pr title when validation was failed
+  action: comment
 ```
 
 ## Event triggers
