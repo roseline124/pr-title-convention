@@ -15,30 +15,47 @@ describe('validatePrTitle', () => {
       expect(async () => await validatePrTitle(inputs[index])).not.toThrow();
     }
   });
+
+  it('throws for PR titles without a type', async () => {
+    expect(async () => await validatePrTitle('Fix bug')).rejects.toThrow(
+      'Unknown release type "null" found in pull request title "Fix bug".'
+    );
+  });
+
+  it('throws for PR titles with only a type', async () => {
+    await expect(validatePrTitle('fix:')).rejects.toThrow(
+      'No subject found in pull request title "fix:".'
+    );
+  });
+
+  it('throws for PR titles without a subject', async () => {
+    await expect(validatePrTitle('fix: ')).rejects.toThrow(
+      'No subject found in pull request title "fix: ".'
+    );
+  });
+
+  it('throws for PR titles with an unknown type', async () => {
+    await expect(validatePrTitle('foo: Bar')).rejects.toThrow(
+      'Unknown release type "foo" found in pull request title "foo: Bar".'
+    );
+  });
 });
 
-it('throws for PR titles without a type', async () => {
-  await expect(validatePrTitle('Fix bug')).rejects.toThrow(
-    'No release type found in pull request title "Fix bug".'
-  );
-});
+describe('custom types', () => {
+  it('allows PR titles with a supported type', async () => {
+    const inputs = ['foo: Foobar', 'bar: Foobar', 'baz: Foobar'];
+    const types = ['foo', 'bar', 'baz'];
 
-it('throws for PR titles with only a type', async () => {
-  await expect(validatePrTitle('fix:')).rejects.toThrow(
-    'No release type found in pull request title "fix:".'
-  );
-});
+    for (let index = 0; index < inputs.length; index++) {
+      await validatePrTitle(inputs[index], { types });
+    }
+  });
 
-it('throws for PR titles without a subject', async () => {
-  await expect(validatePrTitle('fix: ')).rejects.toThrow(
-    'No subject found in pull request title "fix: ".'
-  );
-});
-
-it('throws for PR titles with an unknown type', async () => {
-  await expect(validatePrTitle('foo: Bar')).rejects.toThrow(
-    'Unknown release type "foo" found in pull request title "foo: Bar".'
-  );
+  it('throws for PR titles with an unknown type', async () => {
+    await expect(validatePrTitle('fix: Foobar', { types: ['foo', 'bar'] })).rejects.toThrow(
+      'Unknown release type "fix" found in pull request title "fix: Foobar".'
+    );
+  });
 });
 
 describe('defined scopes', () => {
@@ -77,64 +94,6 @@ describe('defined scopes', () => {
       'Unknown scope "core" found in pull request title "fix(core): Bar". Use one of the available scopes: foo.'
     );
   });
-
-  // describe('require scope', () => {
-  //   describe('scope allowlist defined', () => {
-  //     it('passes when a scope is provided', async () => {
-  //       await validatePrTitle('fix(core): Bar', {
-  //         scopes: ['core'],
-  //         requireScope: true,
-  //       });
-  //     });
-
-  //     it('throws when a scope is missing', async () => {
-  //       await expect(
-  //         validatePrTitle('fix: Bar', {
-  //           scopes: ['foo', 'bar'],
-  //           requireScope: true,
-  //         })
-  //       ).rejects.toThrow(
-  //         'No scope found in pull request title "fix: Bar". Use one of the available scopes: foo, bar.'
-  //       );
-  //     });
-  //   });
-
-  //   describe('scope allowlist not defined', () => {
-  //     it('passes when a scope is provided', async () => {
-  //       await validatePrTitle('fix(core): Bar', {
-  //         requireScope: true,
-  //       });
-  //     });
-
-  //     it('throws when a scope is missing', async () => {
-  //       await expect(
-  //         validatePrTitle('fix: Bar', {
-  //           requireScope: true,
-  //         })
-  //       ).rejects.toThrow(
-  //         // Should make no mention of any available scope
-  //         /^No scope found in pull request title "fix: Bar".$/
-  //       );
-  //     });
-  //   });
-  // });
-});
-
-describe('custom types', () => {
-  it('allows PR titles with a supported type', async () => {
-    const inputs = ['foo: Foobar', 'bar: Foobar', 'baz: Foobar'];
-    const types = ['foo', 'bar', 'baz'];
-
-    for (let index = 0; index < inputs.length; index++) {
-      await validatePrTitle(inputs[index], { types });
-    }
-  });
-
-  it('throws for PR titles with an unknown type', async () => {
-    await expect(validatePrTitle('fix: Foobar', { types: ['foo', 'bar'] })).rejects.toThrow(
-      'Unknown release type "fix" found in pull request title "fix: Foobar".'
-    );
-  });
 });
 
 describe('description validation', () => {
@@ -155,7 +114,7 @@ describe('description validation', () => {
       'The subject found in the pull request title cannot start with an uppercase character.';
     await expect(
       validatePrTitle('fix: Foobar', {
-        subjectPattern: '^(?![A-Z]).+$',
+        subjectPattern: '^(?!\\s?[A-Z]).+$',
         subjectPatternError: customError,
       })
     ).rejects.toThrow(customError);
@@ -164,22 +123,22 @@ describe('description validation', () => {
   it('interpolates variables into `subjectPatternError`', async () => {
     await expect(
       validatePrTitle('fix: Foobar', {
-        subjectPattern: '^(?![A-Z]).+$',
+        subjectPattern: '^(?!\\s?[A-Z]).+$',
         subjectPatternError:
           'The subject "{subject}" found in the pull request title "{title}" cannot start with an uppercase character.',
       })
     ).rejects.toThrow(
-      'The subject "Foobar" found in the pull request title "fix: Foobar" cannot start with an uppercase character.'
+      'The subject " Foobar" found in the pull request title "fix: Foobar" cannot start with an uppercase character.'
     );
   });
 
   it('throws for invalid subjects', async () => {
     await expect(
       validatePrTitle('fix: Foobar', {
-        subjectPattern: '^(?![A-Z]).+$',
+        subjectPattern: '^(?!\\s?[A-Z]).+$',
       })
     ).rejects.toThrow(
-      'The subject "Foobar" found in pull request title "fix: Foobar" doesn\'t match the configured pattern "^(?![A-Z]).+$".'
+      'The subject " Foobar" found in pull request title "fix: Foobar" doesn\'t match the configured pattern "^(?!\\s?[A-Z]).+$'
     );
   });
 
@@ -189,7 +148,7 @@ describe('description validation', () => {
         subjectPattern: 'Foo',
       })
     ).rejects.toThrow(
-      'The subject "Foobar" found in pull request title "fix: Foobar" isn\'t an exact match for the configured pattern "Foo". Please provide a subject that matches the whole pattern exactly.'
+      'The subject " Foobar" found in pull request title "fix: Foobar" isn\'t an exact match for the configured pattern "Foo". Please provide a subject that matches the whole pattern exactly.'
     );
   });
 

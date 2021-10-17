@@ -62,7 +62,7 @@ function validateScope(prTitle: string, scope?: string, scopes?: string[]) {
 }
 
 function validateSubject(prTitle: string, subject?: string, options?: ValidationOptions) {
-  if (is.nullOrUndefined(subject) || is.emptyString(subject)) {
+  if (is.nullOrUndefined(subject) || is.emptyString(subject) || subject === ' ') {
     throw new Error(`No subject found in pull request title "${prTitle}".`);
   }
 
