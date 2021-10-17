@@ -14,5 +14,5 @@ module.exports = {
 
   parseString(input) {
     return input;
-  }
+  },
 };

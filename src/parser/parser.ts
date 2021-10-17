@@ -15,9 +15,9 @@ type ParserReturnType = {
   notes: any;
   references: any;
   revert: any;
-  scope: any;
-  subject: any;
-  type: any;
+  scope?: any;
+  subject?: any;
+  type?: any;
 };
 
 export function parser(raw: string, options: ParserOptions, regex: any): ParserReturnType {
@@ -33,13 +33,13 @@ export function parser(raw: string, options: ParserOptions, regex: any): ParserR
 
   let continueNote = false;
   let isBody = true;
-  const headerCorrespondence = _.map(options!.headerCorrespondence, function (part: string) {
+  const headerCorrespondence = _.map(options.headerCorrespondence, function (part: string) {
     return part.trim();
   });
-  const revertCorrespondence = _.map(options!.revertCorrespondence, function (field: string) {
+  const revertCorrespondence = _.map(options.revertCorrespondence, function (field: string) {
     return field.trim();
   });
-  const mergeCorrespondence = _.map(options!.mergeCorrespondence, function (field: string) {
+  const mergeCorrespondence = _.map(options.mergeCorrespondence, function (field: string) {
     return field.trim();
   });
 
@@ -121,7 +121,7 @@ export function parser(raw: string, options: ParserOptions, regex: any): ParserR
     })
   );
 
-  // body or footer
+  // body or footer -> 제거 해도 됨
   _.forEach(lines, function (line: any) {
     if (options.fieldPattern) {
       const fieldMatch = options.fieldPattern.exec(line);

@@ -9,5 +9,5 @@
     "forceConsistentCasingInFileNames": true,
     "types": ["@types/jest"]
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts", "src/ConfigParser.js"]
 }

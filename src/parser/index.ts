@@ -18,7 +18,7 @@ export function sync(commit: string, options: ParserOptions) {
 function assignOpts(options: ParserOptions) {
   options = _.extend(
     {
-      headerPattern: /^(\w*)(?:\(([\w$.\-*/ ]*)\))?:\s?(.*)$/,
+      headerPattern: /^(\w*)(?:\(([\w$.\-*/ ]*)\))?:(.*)$/,
       headerCorrespondence: ['type', 'scope', 'subject'],
       referenceActions: [
         'close',

@@ -4,6 +4,7 @@ import is from '@sindresorhus/is';
 import { sync as parser } from './parser';
 import { ParserOptions } from './parser/types';
 import { formatMessage } from './formatMessage';
+import { getPaserOptions } from './parser/parserOptions';
 
 type ValidationOptions = {
   types?: string[];
@@ -15,7 +16,7 @@ type ValidationOptions = {
 };
 
 export const validatePrTitle = async (prTitle: string, options?: ValidationOptions) => {
-  const { parserOpts } = await conventionalCommitsConfig();
+  const parserOpts = getPaserOptions();
   const result = parser(prTitle, { ...parserOpts, ...options?.customParserOptions }); // parserOpts를 overriding할 수 있도록 변경
 
   validateType(prTitle, result.type, options?.types);
