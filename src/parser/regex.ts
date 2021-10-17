@@ -1,65 +1,55 @@
-"use strict";
-
 // Copyright © [conventional-changelog team](https://github.com/conventional-changelog)
 
 const reNomatch = /(?!.*)/;
 
-function join(array, joiner) {
+function join(array: any, joiner: any) {
   return array
-    .map(function (val) {
+    .map(function (val: string) {
       return val.trim();
     })
-    .filter(function (val) {
+    .filter(function (val: any) {
       return val.length;
     })
     .join(joiner);
 }
 
-function getNotesRegex(noteKeywords, notesPattern) {
+function getNotesRegex(noteKeywords: any, notesPattern: any) {
   if (!noteKeywords) {
     return reNomatch;
   }
 
-  const noteKeywordsSelection = join(noteKeywords, "|");
+  const noteKeywordsSelection = join(noteKeywords, '|');
 
   if (!notesPattern) {
-    return new RegExp(
-      "^[\\s|*]*(" + noteKeywordsSelection + ")[:\\s]+(.*)",
-      "i"
-    );
+    return new RegExp('^[\\s|*]*(' + noteKeywordsSelection + ')[:\\s]+(.*)', 'i');
   }
 
   return notesPattern(noteKeywordsSelection);
 }
 
-function getReferencePartsRegex(issuePrefixes, issuePrefixesCaseSensitive) {
+function getReferencePartsRegex(issuePrefixes: any, issuePrefixesCaseSensitive: any) {
   if (!issuePrefixes) {
     return reNomatch;
   }
 
-  const flags = issuePrefixesCaseSensitive ? "g" : "gi";
+  const flags = issuePrefixesCaseSensitive ? 'g' : 'gi';
   return new RegExp(
-    "(?:.*?)??\\s*([\\w-\\.\\/]*?)??(" +
-      join(issuePrefixes, "|") +
-      ")([\\w-]*\\d+)",
+    '(?:.*?)??\\s*([\\w-\\.\\/]*?)??(' + join(issuePrefixes, '|') + ')([\\w-]*\\d+)',
     flags
   );
 }
 
-function getReferencesRegex(referenceActions) {
+function getReferencesRegex(referenceActions: any) {
   if (!referenceActions) {
     // matches everything
     return /()(.+)/gi;
   }
 
-  const joinedKeywords = join(referenceActions, "|");
-  return new RegExp(
-    "(" + joinedKeywords + ")(?:\\s+(.*?))(?=(?:" + joinedKeywords + ")|$)",
-    "gi"
-  );
+  const joinedKeywords = join(referenceActions, '|');
+  return new RegExp('(' + joinedKeywords + ')(?:\\s+(.*?))(?=(?:' + joinedKeywords + ')|$)', 'gi');
 }
 
-module.exports = function (options) {
+export function regex(options: any) {
   options = options || {};
   const reNotes = getNotesRegex(options.noteKeywords, options.notesPattern);
   const reReferenceParts = getReferencePartsRegex(
@@ -74,4 +64,4 @@ module.exports = function (options) {
     references: reReferences,
     mentions: /@([\w-]+)/g,
   };
-};
+}
