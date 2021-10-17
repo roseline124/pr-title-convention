@@ -1,15 +1,26 @@
-'use strict';
-
-import { ParserOptions } from './types';
-
 // Copyright © [conventional-changelog team](https://github.com/conventional-changelog)
 
-const _ = require('lodash');
+import _ from 'lodash';
+import { ParserOptions } from './types';
 
 const CATCH_ALL = /()(.+)/gi;
 const SCISSOR = '# ------------------------ >8 ------------------------';
 
-export function parser(raw: string, options: ParserOptions, regex: any) {
+type ParserReturnType = {
+  body: any;
+  footer: any;
+  header: any;
+  mentions: any;
+  merge: any;
+  notes: any;
+  references: any;
+  revert: any;
+  scope: any;
+  subject: any;
+  type: any;
+};
+
+export function parser(raw: string, options: ParserOptions, regex: any): ParserReturnType {
   let currentProcessedField: string;
   let mentionsMatch;
   const otherFields: Record<string, any> = {};
@@ -40,9 +51,6 @@ export function parser(raw: string, options: ParserOptions, regex: any) {
   let notes: any[] = [];
   let references: any[] = [];
   let revert: any = null;
-  let scope = null;
-  let subject = null;
-  let type = null;
 
   if (lines.length === 0) {
     return {

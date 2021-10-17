@@ -27,11 +27,9 @@
     "@actions/github": "^4.0.0",
     "@sindresorhus/is": "^4.2.0",
     "@types/lodash": "^4.14.175",
-    "@types/ramda": "^0.27.45",
-    "conventional-changelog-conventionalcommits": "4.5.0",
+    "conventional-changelog-conventionalcommits": "^4.6.1",
     "conventional-commit-types": "^3.0.0",
-    "conventional-commits-parser": "^3.2.0",
-    "ramda": "^0.27.1"
+    "conventional-commits-parser": "^3.2.0"
   },
   "devDependencies": {
     "@semantic-release/changelog": "5.0.1",
