@@ -1,8 +1,6 @@
-const conventionalCommitsConfig = require('conventional-changelog-conventionalcommits');
 const conventionalCommitTypes = require('conventional-commit-types');
 import is from '@sindresorhus/is';
 import { sync as parser } from './parser';
-import { ParserOptions } from './parser/types';
 import { formatMessage } from './formatMessage';
 import { getPaserOptions } from './parser/parserOptions';
 
@@ -12,12 +10,11 @@ type ValidationOptions = {
   subjectPattern?: string;
   subjectPatternError?: string;
   action?: 'autofix' | 'comment';
-  customParserOptions?: ParserOptions;
 };
 
 export const validatePrTitle = async (prTitle: string, options?: ValidationOptions) => {
   const parserOpts = getPaserOptions();
-  const result = parser(prTitle, { ...parserOpts, ...options?.customParserOptions }); // parserOpts를 overriding할 수 있도록 변경
+  const result = parser(prTitle, parserOpts);
 
   validateType(prTitle, result.type, options?.types);
   validateScope(prTitle, result.scope, options?.scopes);
