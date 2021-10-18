@@ -1,7 +1,7 @@
-name: @roseline124/semantic-pull-request
+name: pr-title-convention
 author: Roseline124 <guseod24@gmail.com>
 
-description: Ensure your PR title matches the Conventional Commits spec(https://www.conventionalcommits.org/) by comment or fix. This repo is forked from @amannn/action-semantic-pull-request.
+description: Fix your PR title or comment on your pr when title is not matched with the Conventional Commits spec. This repo is forked from @amannn/action-semantic-pull-request.
 runs:
   using: 'node12'
   main: 'dist/index.js'

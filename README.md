@@ -1,6 +1,20 @@
 # action-semantic-pull-request
 
-This repo is forked from amannn's action-semantic-pull-request.
+This action is forked from [amannn's action-semantic-pull-request](https://github.com/amannn/action-semantic-pull-request).
+
+1. **choose action(comment or autofix)** when pr title is needed to be fixed
+
+- autofix: automatically fixes pr title when miss-spelled type and scope
+- comment: adds comment on your pr (default is 'comment')
+
+2. **subject pattern** allows white space after colon(:)
+   you can control subject with subject pattern
+
+3. I'm supposed to add inlcudeBranchNameToSubject option if needed
+
+thank you :)
+
+---
 
 This is a [Github Action](https://github.com/features/actions) that ensures that your PR title matches the [Conventional Commits spec](https://www.conventionalcommits.org/).
 
