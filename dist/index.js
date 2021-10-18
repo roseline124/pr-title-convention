@@ -43171,34 +43171,7 @@ function wrappy (fn, cb) {
 
 /***/ }),
 
-/***/ 7509:
-/***/ ((__unused_webpack_module, __webpack_exports__, __nccwpck_require__) => {
-
-"use strict";
-__nccwpck_require__.r(__webpack_exports__);
-/* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
-/* harmony export */   "ConfigParser": () => /* binding */ ConfigParser
-/* harmony export */ });
-const ENUM_SPLIT_REGEX = /[,\s]\s*/;
-class ConfigParser {
-    static parseEnum(input) {
-        return input
-            .split(ENUM_SPLIT_REGEX)
-            .map((part) => part.trim())
-            .filter((part) => part.length > 0);
-    }
-    static parseBoolean(input) {
-        return JSON.parse(input.trim());
-    }
-    static parseString(input) {
-        return input;
-    }
-}
-
-
-/***/ }),
-
-/***/ 6785:
+/***/ 5221:
 /***/ ((__unused_webpack_module, __webpack_exports__, __nccwpck_require__) => {
 
 "use strict";
@@ -43383,8 +43356,25 @@ _ValidationErrorHandler_instances = new WeakSet(), _ValidationErrorHandler_fixTi
     return prTitle;
 };
 
+// CONCATENATED MODULE: ./src/ConfigParser.ts
+const ENUM_SPLIT_REGEX = /[,\s]\s*/;
+class ConfigParser {
+    static parseEnum(input) {
+        return input
+            .split(ENUM_SPLIT_REGEX)
+            .map((part) => part.trim())
+            .filter((part) => part.length > 0);
+    }
+    static parseBoolean(input) {
+        return JSON.parse(input.trim());
+    }
+    static parseString(input) {
+        return input;
+    }
+}
+
 // CONCATENATED MODULE: ./src/parseConfig.ts
-const ConfigParser = __nccwpck_require__(7509);
+
 function parseConfig() {
     let types;
     if (process.env.INPUT_TYPES) {
@@ -43414,9 +43404,9 @@ function parseConfig() {
     if (process.env.INPUT_VALIDATESINGLECOMMIT) {
         validateSingleCommit = ConfigParser.parseBoolean(process.env.INPUT_VALIDATESINGLECOMMIT);
     }
-    let action;
+    let action = 'comment';
     if (process.env.INPUT_ACTION) {
-        action = ConfigParser.parseEnum(process.env.INPUT_ACTION);
+        action = ConfigParser.parseString(process.env.INPUT_ACTION);
     }
     let includeBranchNameToSubject;
     if (process.env.INPUT_INCLUDEBRANCHNAMETOSUBJECT) {
@@ -44318,6 +44308,6 @@ module.exports = require("zlib");;
 /******/ 	// module exports must be returned from runtime so entry inlining is disabled
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
-/******/ 	return __nccwpck_require__(6785);
+/******/ 	return __nccwpck_require__(5221);
 /******/ })()
 ;

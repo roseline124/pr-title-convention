@@ -1,4 +1,5 @@
 import { ConfigParser } from './ConfigParser';
+import { ErrorHandlerAction } from './types';
 
 export function parseConfig() {
   let types;
@@ -36,9 +37,9 @@ export function parseConfig() {
     validateSingleCommit = ConfigParser.parseBoolean(process.env.INPUT_VALIDATESINGLECOMMIT);
   }
 
-  let action;
+  let action: ErrorHandlerAction = 'comment';
   if (process.env.INPUT_ACTION) {
-    action = ConfigParser.parseEnum(process.env.INPUT_ACTION);
+    action = ConfigParser.parseString(process.env.INPUT_ACTION) as ErrorHandlerAction;
   }
 
   let includeBranchNameToSubject;
