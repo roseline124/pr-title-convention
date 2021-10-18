@@ -1,5 +1,12 @@
 # Changelog
 
+### [3.5.1](https://github.com/roseline124/action-semantic-pull-request/compare/v3.5.0...v3.5.1) (2021-10-18)
+
+
+### Bug Fixes
+
+* move conventional-changelog package to dev deps ([d1140bb](https://github.com/roseline124/action-semantic-pull-request/commit/d1140bb02f1295d102832e126ab226a8e7b98f7c))
+
 ## [3.5.0](https://github.com/roseline124/action-semantic-pull-request/compare/v3.4.2...v3.5.0) (2021-10-18)
 
 
