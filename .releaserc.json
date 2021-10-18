@@ -20,5 +20,7 @@
       }
     ]
   ],
-  "branches": ["develop", { "name": "alpha", "prerelease": true }]
+  "release": {
+    "branches": ["master", { "name": "develop", "prerelease": true }]
+  }
 }
