@@ -3,13 +3,16 @@ import is from '@sindresorhus/is';
 import { sync as parser } from './parser';
 import { formatMessage } from './formatMessage';
 import { getPaserOptions } from './parser/parserOptions';
+import { ErrorHandlerAction } from './types';
+import { ErrorType, ValidationError } from './errors';
+import { suggestWord } from './suggestWord';
 
 type ValidationOptions = {
   types?: string[];
   scopes?: string[];
   subjectPattern?: string;
   subjectPatternError?: string;
-  action?: 'autofix' | 'comment';
+  action?: ErrorHandlerAction;
 };
 
 export const validatePrTitle = async (prTitle: string, options?: ValidationOptions) => {
@@ -26,8 +29,13 @@ function validateType(prTitle: string, prType: string, types?: string[]) {
   const availableTypes = types == null || types.length === 0 ? defaultTypes : types;
 
   if (!availableTypes.includes(prType)) {
-    throw new Error(
-      `Unknown release type "${prType}" found in pull request title "${prTitle}". \n\n${printAvailableTypes()}`
+    throw new ValidationError(
+      `Unknown release type "${prType}" found in pull request title "${prTitle}". ${suggestWord(
+        prType,
+        types
+      )}\n\n${printAvailableTypes()}`,
+      ErrorType.TYPE_ERROR,
+      { types, type: prType }
     );
   }
 
@@ -48,34 +56,29 @@ function validateScope(prTitle: string, scope?: string, scopes?: string[]) {
   const givenScopes = scope?.split(',')?.map((scope) => scope.trim());
   const unknownScopes = givenScopes ? givenScopes.filter((scope) => !scopes?.includes(scope)) : [];
   if (scopes && unknownScopes.length > 0) {
-    throw new Error(
+    throw new ValidationError(
       `Unknown ${unknownScopes.length > 1 ? 'scopes' : 'scope'} "${unknownScopes.join(
         ','
-      )}" found in pull request title "${prTitle}". Use one of the available scopes: ${scopes.join(
-        ', '
-      )}.`
+      )}" found in pull request title "${prTitle}". ${suggestWord(
+        unknownScopes,
+        scopes
+      )}Use one of the available scopes: ${scopes.join(', ')}.`,
+      ErrorType.SCOPE_ERROR,
+      { scopes, scope }
     );
   }
 }
 
 function validateSubject(prTitle: string, subject?: string, options?: ValidationOptions) {
-  if (is.nullOrUndefined(subject) || is.emptyString(subject) || subject === ' ') {
-    throw new Error(`No subject found in pull request title "${prTitle}".`);
-  }
-
-  function throwSubjectPatternError(message: string) {
-    if (options?.subjectPatternError) {
-      message = formatMessage(options.subjectPatternError, {
-        subject,
-        title: prTitle,
-      });
-    }
-
-    throw new Error(message);
+  if (is.nullOrUndefined(subject) || is.emptyStringOrWhitespace(subject)) {
+    throw new ValidationError(
+      `No subject found in pull request title "${prTitle}".`,
+      ErrorType.SUBJECT_NOT_FOUND_ERROR
+    );
   }
 
   if (options?.subjectPattern) {
-    const match = subject.match(new RegExp(options.subjectPattern));
+    const match = (subject as string).match(new RegExp(options.subjectPattern));
 
     if (!match) {
       throwSubjectPatternError(
@@ -86,12 +89,26 @@ function validateSubject(prTitle: string, subject?: string, options?: Validation
     }
 
     const matchedPart = match?.[0];
-    if (matchedPart!.length !== subject.length) {
+    if (matchedPart!.length !== (subject as string).length) {
       throwSubjectPatternError(
         `The subject "${subject}" found in pull request title "${prTitle}" isn't an exact match for the configured pattern "${
           options!.subjectPattern
         }". Please provide a subject that matches the whole pattern exactly.`
       );
     }
+  }
+
+  function throwSubjectPatternError(message: string) {
+    if (options?.subjectPatternError) {
+      message = formatMessage(options.subjectPatternError, {
+        subject,
+        title: prTitle,
+      });
+    }
+
+    throw new ValidationError(message, ErrorType.SUBJECT_ERROR, {
+      subject,
+      subjectPattern: options?.subjectPattern,
+    });
   }
 }
