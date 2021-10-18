@@ -1,5 +1,7 @@
 # action-semantic-pull-request
 
+do not use yet... T.T
+
 This action is forked from [amannn's action-semantic-pull-request](https://github.com/amannn/action-semantic-pull-request).
 
 1. **choose action(comment or autofix)** when pr title is needed to be fixed
