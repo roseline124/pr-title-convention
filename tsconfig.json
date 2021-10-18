@@ -1,10 +1,9 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
+    "target": "es2015",
+    "moduleResolution": "node",
     "strict": true,
     "esModuleInterop": true,
-    "moduleResolution": "node",
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "types": ["@types/jest"]

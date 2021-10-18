@@ -1,7 +1,7 @@
 {
   "name": "@roseline124/action-semantic-pull-request",
   "version": "0.0.0",
-  "description": "Ensure your PR title matches the Conventional Commits spec. fork from @amannn/action-semantic-pull-request",
+  "description": "Ensure your PR title matches the Conventional Commits spec by comment or fix. This repo is forked from @amannn/action-semantic-pull-request",
   "main": "dist/index.js",
   "scripts": {
     "lint": "eslint src",

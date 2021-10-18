@@ -14,14 +14,14 @@ export class ValidationErrorHandler {
 
   async handleValidationError(action: ErrorHandlerAction, errors: ValidationError[]) {
     if (action === 'autofix') {
-      return await this.#autofix(errors);
+      return await this.autofix(errors);
     }
 
-    return await this.#comment(errors);
+    return await this.comment(errors);
   }
 
   /** @refer restapi https://docs.github.com/en/rest/reference/issues#create-an-issue-comment */
-  async #comment(errors: ValidationError[]) {
+  private async comment(errors: ValidationError[]) {
     return await this.gitClient.request(
       'POST /repos/{owner}/{repo}/issues/{issue_number}/comments',
       {
@@ -34,7 +34,7 @@ export class ValidationErrorHandler {
   }
 
   /** @refer https://docs.github.com/en/rest/reference/pulls#update-a-pull-request */
-  async #autofix(errors: ValidationError[]) {
+  private async autofix(errors: ValidationError[]) {
     let prTitle = this.prTitle;
 
     if (
@@ -46,7 +46,7 @@ export class ValidationErrorHandler {
         ].includes(error.type)
       )
     ) {
-      return await this.#comment(errors);
+      return await this.comment(errors);
     }
 
     for (const error of errors) {

@@ -15,12 +15,7 @@ type ErrorInfo = {
 };
 
 export class ValidationError extends Error {
-  type: ErrorType;
-  info?: ErrorInfo;
-
-  constructor(message: string, type = ErrorType.UNKNOWN_ERROR, info?: ErrorInfo) {
+  constructor(message: string, public type = ErrorType.UNKNOWN_ERROR, public info?: ErrorInfo) {
     super(message);
-    this.type = type;
-    this.info = info;
   }
 }
