@@ -1,3 +1,4 @@
+import core from '@actions/core';
 import { GitHub } from '@actions/github/lib/utils';
 import is from '@sindresorhus/is';
 import { filter, map, pipe, split, trim } from 'ramda';
@@ -22,6 +23,14 @@ export class ValidationErrorHandler {
 
   /** @refer restapi https://docs.github.com/en/rest/reference/issues#create-an-issue-comment */
   private async comment(errors: ValidationError[]) {
+    core.debug(
+      JSON.stringify({
+        owner: this.owner,
+        repo: this.repo,
+        issue_number: this.prNumber,
+        body: `💩 [PR Title Error Message] \n${errors.map((error) => error.message).join('\n')}`,
+      })
+    );
     return await this.gitClient.request(
       'POST /repos/{owner}/{repo}/issues/{issue_number}/comments',
       {

@@ -21,7 +21,6 @@ export const validatePrTitle = async (prTitle: string, options?: ValidationOptio
   const result = parser(prTitle, parserOpts);
 
   let errors: ValidationError[] = [];
-  /** errors 참조 못하는 버그 수정 */
   const typeError = tryCatch<() => void, ValidationError, ValidationError>(
     () => validateType(prTitle, result.type, options?.types),
     (error) => always(error)()
@@ -45,10 +44,6 @@ export const validatePrTitle = async (prTitle: string, options?: ValidationOptio
   }
 
   return errors;
-
-  function deferError(error: ValidationError) {
-    errors.push(error);
-  }
 };
 
 function validateType(prTitle: string, prType: string, types?: string[]) {
