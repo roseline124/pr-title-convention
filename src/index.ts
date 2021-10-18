@@ -35,6 +35,7 @@ export async function run() {
       includeBranchNameToSubject,
     });
     core.debug(parseConfigs);
+    console.log(parseConfigs);
 
     const contextPullRequest = github.context.payload.pull_request;
     if (!contextPullRequest) {
@@ -53,6 +54,7 @@ export async function run() {
     });
 
     core.debug(JSON.stringify(pullRequest));
+    console.log(JSON.stringify(pullRequest));
 
     // Pull requests that start with "[WIP] " are excluded from the check.
     const isWip = wip && /^\[WIP\]\s/.test(pullRequest.title);
@@ -123,6 +125,7 @@ export async function run() {
     }
 
     core.debug(JSON.stringify(validationErrors));
+    console.log(JSON.stringify(validationErrors));
 
     if (!isWip && validationErrors.length > 0) {
       const validationErrorHandler = new ValidationErrorHandler(client, contextPullRequest);
