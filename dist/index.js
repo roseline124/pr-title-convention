@@ -43937,21 +43937,29 @@ function run() {
             }
             const client = github_default().getOctokit(githubToken);
             const { types, scopes, wip, subjectPattern, subjectPatternError, validateSingleCommit, action, includeBranchNameToSubject, } = parseConfig();
+            const parseConfigs = JSON.stringify({
+                types,
+                scopes,
+                wip,
+                subjectPattern,
+                subjectPatternError,
+                validateSingleCommit,
+                action,
+                includeBranchNameToSubject,
+            });
+            core_default().debug(parseConfigs);
             const contextPullRequest = (github_default()).context.payload.pull_request;
             if (!contextPullRequest) {
                 throw new Error("This action can only be invoked in `pull_request_target` or `pull_request` events. Otherwise the pull request can't be inferred.");
             }
             const owner = contextPullRequest.base.user.login;
             const repo = contextPullRequest.base.repo.name;
-            // The pull request info on the context isn't up to date. When
-            // the user updates the title and re-runs the workflow, it would
-            // be outdated. Therefore fetch the pull request via the REST API
-            // to ensure we use the current title.
             const { data: pullRequest } = yield client.pulls.get({
                 owner,
                 repo,
                 pull_number: contextPullRequest.number,
             });
+            core_default().debug(JSON.stringify(pullRequest));
             // Pull requests that start with "[WIP] " are excluded from the check.
             const isWip = wip && /^\[WIP\]\s/.test(pullRequest.title);
             let validationErrors = [];
@@ -44012,6 +44020,7 @@ function run() {
                     context: 'pr-title-convention',
                 });
             }
+            core_default().debug(JSON.stringify(validationErrors));
             if (!isWip && validationErrors.length > 0) {
                 const validationErrorHandler = new ValidationErrorHandler(client, contextPullRequest);
                 yield validationErrorHandler.handleValidationError(action, validationErrors);
