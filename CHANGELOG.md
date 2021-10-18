@@ -1,5 +1,12 @@
 # Changelog
 
+### [3.5.2](https://github.com/roseline124/action-semantic-pull-request/compare/v3.5.1...v3.5.2) (2021-10-18)
+
+
+### Bug Fixes
+
+* action.yml ([#1](https://github.com/roseline124/action-semantic-pull-request/issues/1)) ([419b45a](https://github.com/roseline124/action-semantic-pull-request/commit/419b45adece04418ae7a38ee3b3cb3b01234d9a1))
+
 ### [3.5.1](https://github.com/roseline124/action-semantic-pull-request/compare/v3.5.0...v3.5.1) (2021-10-18)
 
 
