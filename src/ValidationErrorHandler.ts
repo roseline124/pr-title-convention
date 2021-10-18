@@ -31,7 +31,6 @@ export class ValidationErrorHandler {
         body: `💩 [PR Title Error Message] \n${errors.map((error) => error.message).join('\n')}`,
       })
     );
-
     return await this.gitClient.request(
       'POST /repos/{owner}/{repo}/issues/{issue_number}/comments',
       {
