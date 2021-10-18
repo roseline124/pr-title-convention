@@ -1,4 +1,4 @@
-const ConfigParser = require('./ConfigParser');
+import { ConfigParser } from './ConfigParser';
 
 export function parseConfig() {
   let types;
