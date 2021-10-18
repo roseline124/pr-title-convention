@@ -19,3 +19,34 @@ jobs:
       - uses: ./
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          types: |
+            fix
+            feat
+            break
+            major
+            breaking
+            feat
+            minor
+            feature
+            docs
+            style
+            refactor
+            perf
+            test
+            build
+            ci
+            chore
+            revert
+          subjectPattern: ^(?!\s?\(.*\)).+
+          subjectPatternError: |
+            subject는 scope를 포함해서는 안됩니다. "fix(scope): subject"와 같이 작성해주세요.\n
+            pr title: "{title}"\n
+            subject: "{subject}"
+          wip: true # [WIP]을 사용하면 PR title 검사를 하지 않습니다. PR check를 pending 상태로 유지합니다.
+          validateSingleCommit: false # 커밋이 하나밖에 없는 경우 PR 타이틀을 커밋 메시지로 쓰지 않으므로 해당 커밋 메시지를 validation합니다.
+      - uses: actions/checkout@v2
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
