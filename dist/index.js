@@ -43295,6 +43295,7 @@ var _ValidationErrorHandler_instances, _ValidationErrorHandler_fixTitleWithSugge
 
 
 
+
 class ValidationErrorHandler {
     constructor(gitClient, 
     /** @refer webhookpayload https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#pull_request */
@@ -43314,6 +43315,12 @@ class ValidationErrorHandler {
     /** @refer restapi https://docs.github.com/en/rest/reference/issues#create-an-issue-comment */
     comment(errors) {
         return __awaiter(this, void 0, void 0, function* () {
+            core_default().debug(JSON.stringify({
+                owner: this.owner,
+                repo: this.repo,
+                issue_number: this.prNumber,
+                body: `💩 [PR Title Error Message] \n${errors.map((error) => error.message).join('\n')}`,
+            }));
             return yield this.gitClient.request('POST /repos/{owner}/{repo}/issues/{issue_number}/comments', {
                 owner: this.owner,
                 repo: this.repo,
@@ -43846,7 +43853,6 @@ const validatePrTitle = (prTitle, options) => validatePrTitle_awaiter(void 0, vo
     const parserOpts = getPaserOptions();
     const result = sync(prTitle, parserOpts);
     let errors = [];
-    /** errors 참조 못하는 버그 수정 */
     const typeError = (0,src.tryCatch)(() => validateType(prTitle, result.type, options === null || options === void 0 ? void 0 : options.types), (error) => (0,src.always)(error)())();
     if (typeError) {
         errors.push(typeError);
@@ -43860,9 +43866,6 @@ const validatePrTitle = (prTitle, options) => validatePrTitle_awaiter(void 0, vo
         errors.push(subjectError);
     }
     return errors;
-    function deferError(error) {
-        errors.push(error);
-    }
 });
 function validateType(prTitle, prType, types) {
     const defaultTypes = Object.keys(conventionalCommitTypes.types);

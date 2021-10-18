@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.0.2](https://github.com/roseline124/pr-title-convention/compare/v1.0.1...v1.0.2) (2021-10-18)
+
+
+### Bug Fixes
+
+* config file ([646f3f1](https://github.com/roseline124/pr-title-convention/commit/646f3f1f48ca565c1b15ac58ebe970afde70f244))
+
 ## 1.0.0 (2021-10-18)
 
 
