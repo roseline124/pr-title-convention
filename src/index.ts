@@ -24,12 +24,26 @@ export async function run() {
       includeBranchNameToSubject,
     } = parseConfig();
 
+    const parseConfigs = JSON.stringify({
+      types,
+      scopes,
+      wip,
+      subjectPattern,
+      subjectPatternError,
+      validateSingleCommit,
+      action,
+      includeBranchNameToSubject,
+    });
+    core.debug(parseConfigs);
+
     const contextPullRequest = github.context.payload.pull_request;
     if (!contextPullRequest) {
       throw new Error(
         "This action can only be invoked in `pull_request_target` or `pull_request` events. Otherwise the pull request can't be inferred."
       );
     }
+
+    core.debug(JSON.stringify(contextPullRequest));
 
     const owner = contextPullRequest.base.user.login;
     const repo = contextPullRequest.base.repo.name;
@@ -111,6 +125,8 @@ export async function run() {
         context: 'pr-title-convention',
       });
     }
+
+    core.debug(JSON.stringify(validationErrors));
 
     if (!isWip && validationErrors.length > 0) {
       const validationErrorHandler = new ValidationErrorHandler(client, contextPullRequest);
