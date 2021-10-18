@@ -6,11 +6,11 @@
   "scripts": {
     "lint": "eslint src",
     "test": "jest src",
-    "build": "rm -rf dist && ncc build"
+    "build": "ncc build src/index.ts --out dist"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/roseline124/action-semantic-pull-request.git"
+    "url": "git+https://github.com/roseline124/pr-title-convention.git"
   },
   "keywords": [
     "github-action",

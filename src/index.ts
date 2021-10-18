@@ -5,7 +5,7 @@ import { ValidationErrorHandler } from './ValidationErrorHandler';
 import { parseConfig } from './parseConfig';
 import { validatePrTitle } from './validatePrTitle';
 
-module.exports = async function run() {
+export async function run() {
   try {
     const githubToken = process.env.GITHUB_TOKEN;
     if (!githubToken) {
@@ -102,13 +102,13 @@ module.exports = async function run() {
         repo,
         sha: pullRequest.head.sha,
         state: newStatus,
-        target_url: 'https://github.com/roseline124/action-semantic-pull-request',
+        target_url: 'https://github.com/roseline124/pr-title-convention',
         description: isWip
           ? 'This PR is marked with "[WIP]".'
           : validationErrors.length > 0
           ? 'PR title validation failed'
           : 'Ready for review & merge.',
-        context: 'action-semantic-pull-request',
+        context: 'pr-title-convention',
       });
     }
 
@@ -119,4 +119,4 @@ module.exports = async function run() {
   } catch (error: any) {
     core.setFailed(error.message);
   }
-};
+}

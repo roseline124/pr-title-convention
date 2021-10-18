@@ -2,16 +2,6 @@ module.exports =
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 2932:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __nccwpck_require__) => {
-
-const run = __nccwpck_require__(6785);
-
-run();
-
-
-/***/ }),
-
 /***/ 7351:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -43209,11 +43199,16 @@ class ConfigParser {
 /***/ }),
 
 /***/ 6785:
-/***/ ((module, __webpack_exports__, __nccwpck_require__) => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __nccwpck_require__) => {
 
 "use strict";
 // ESM COMPAT FLAG
 __nccwpck_require__.r(__webpack_exports__);
+
+// EXPORTS
+__nccwpck_require__.d(__webpack_exports__, {
+  "run": () => /* binding */ run
+});
 
 // EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
 var core = __nccwpck_require__(2186);
@@ -43925,7 +43920,6 @@ function validateSubject(prTitle, subject, options) {
 }
 
 // CONCATENATED MODULE: ./src/index.ts
-/* module decorator */ module = __nccwpck_require__.hmd(module);
 var src_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -43941,7 +43935,7 @@ var src_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argu
 
 
 
-module.exports = function run() {
+function run() {
     return src_awaiter(this, void 0, void 0, function* () {
         try {
             const githubToken = process.env.GITHUB_TOKEN;
@@ -44016,13 +44010,13 @@ module.exports = function run() {
                     repo,
                     sha: pullRequest.head.sha,
                     state: newStatus,
-                    target_url: 'https://github.com/roseline124/action-semantic-pull-request',
+                    target_url: 'https://github.com/roseline124/pr-title-convention',
                     description: isWip
                         ? 'This PR is marked with "[WIP]".'
                         : validationErrors.length > 0
                             ? 'PR title validation failed'
                             : 'Ready for review & merge.',
-                    context: 'action-semantic-pull-request',
+                    context: 'pr-title-convention',
                 });
             }
             if (!isWip && validationErrors.length > 0) {
@@ -44034,7 +44028,7 @@ module.exports = function run() {
             core_default().setFailed(error.message);
         }
     });
-};
+}
 
 
 /***/ }),
@@ -44290,21 +44284,6 @@ module.exports = require("zlib");;
 /******/ 		};
 /******/ 	})();
 /******/ 	
-/******/ 	/* webpack/runtime/harmony module decorator */
-/******/ 	(() => {
-/******/ 		__nccwpck_require__.hmd = (module) => {
-/******/ 			module = Object.create(module);
-/******/ 			if (!module.children) module.children = [];
-/******/ 			Object.defineProperty(module, 'exports', {
-/******/ 				enumerable: true,
-/******/ 				set: () => {
-/******/ 					throw new Error('ES Modules may not assign module.exports or exports.*, Use ESM export syntax, instead: ' + module.id);
-/******/ 				}
-/******/ 			});
-/******/ 			return module;
-/******/ 		};
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
 /******/ 	(() => {
 /******/ 		__nccwpck_require__.o = (obj, prop) => Object.prototype.hasOwnProperty.call(obj, prop)
@@ -44336,6 +44315,6 @@ module.exports = require("zlib");;
 /******/ 	// module exports must be returned from runtime so entry inlining is disabled
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
-/******/ 	return __nccwpck_require__(2932);
+/******/ 	return __nccwpck_require__(6785);
 /******/ })()
 ;
