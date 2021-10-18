@@ -1,5 +1,27 @@
 # Changelog
 
+## [3.5.0](https://github.com/roseline124/action-semantic-pull-request/compare/v3.4.2...v3.5.0) (2021-10-18)
+
+
+### Features
+
+* add validationErrorHandler ([f545e6e](https://github.com/roseline124/action-semantic-pull-request/commit/f545e6e5b6a94b5daa328db2c0414bc47fee6ad4))
+* fork conventional-commit-parser codes ([c5759fc](https://github.com/roseline124/action-semantic-pull-request/commit/c5759fc5362f28a63228995c713601fc6b4c786d))
+* suggest word 추 ([4f16b16](https://github.com/roseline124/action-semantic-pull-request/commit/4f16b162a360bc9ca12230a84563bd1422525a2b))
+
+
+### Bug Fixes
+
+* amannn -> roseline124 ([5ed84f7](https://github.com/roseline124/action-semantic-pull-request/commit/5ed84f7494105deb5b8cdde014635d79948a5f83))
+* build error ([7864a21](https://github.com/roseline124/action-semantic-pull-request/commit/7864a2192b9577dc9328517d4d533d6b07743466))
+* header pattern ([3d8de72](https://github.com/roseline124/action-semantic-pull-request/commit/3d8de7279006032ec2a0d1c531e64f845a7ec823))
+* migrate configParser, parseConfig to typescript and fix action ([5bcc6f4](https://github.com/roseline124/action-semantic-pull-request/commit/5bcc6f49170679e4bb00e8f6b3f18acb7c391b54))
+* migrate parser to typescript ([b3e7ec9](https://github.com/roseline124/action-semantic-pull-request/commit/b3e7ec945a61825251b5797390737f1c4911287e))
+* migrate validatePrTitle, formateMessage to typescript ([21b1135](https://github.com/roseline124/action-semantic-pull-request/commit/21b11356d649ba5c2f3587d1470ef635b8a5b8cb))
+* pr template ([1af50b5](https://github.com/roseline124/action-semantic-pull-request/commit/1af50b57265f377f1c78406bac3cd6afd031238a))
+* release error ([81dbbf3](https://github.com/roseline124/action-semantic-pull-request/commit/81dbbf31430aee666f5e6d17306a6479521333c0))
+* subject pattern에서 콜론 다음에 띄어쓰기 가능하도록 변경 ([ffe3f37](https://github.com/roseline124/action-semantic-pull-request/commit/ffe3f37bd9bf83f25780d1a66b75904ffdb656ea))
+
 ### [3.4.2](https://github.com/amannn/action-semantic-pull-request/compare/v3.4.1...v3.4.2) (2021-08-16)
 
 
