@@ -43,8 +43,6 @@ export async function run() {
       );
     }
 
-    core.debug(JSON.stringify(contextPullRequest));
-
     const owner = contextPullRequest.base.user.login;
     const repo = contextPullRequest.base.repo.name;
 
@@ -57,6 +55,8 @@ export async function run() {
       repo,
       pull_number: contextPullRequest.number,
     });
+
+    core.debug(JSON.stringify(pullRequest));
 
     // Pull requests that start with "[WIP] " are excluded from the check.
     const isWip = wip && /^\[WIP\]\s/.test(pullRequest.title);
