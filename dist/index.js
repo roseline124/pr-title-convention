@@ -43948,6 +43948,7 @@ function run() {
                 includeBranchNameToSubject,
             });
             core_default().debug(parseConfigs);
+            console.log(parseConfigs);
             const contextPullRequest = (github_default()).context.payload.pull_request;
             if (!contextPullRequest) {
                 throw new Error("This action can only be invoked in `pull_request_target` or `pull_request` events. Otherwise the pull request can't be inferred.");
@@ -43960,6 +43961,7 @@ function run() {
                 pull_number: contextPullRequest.number,
             });
             core_default().debug(JSON.stringify(pullRequest));
+            console.log(JSON.stringify(pullRequest));
             // Pull requests that start with "[WIP] " are excluded from the check.
             const isWip = wip && /^\[WIP\]\s/.test(pullRequest.title);
             let validationErrors = [];
@@ -44021,6 +44023,7 @@ function run() {
                 });
             }
             core_default().debug(JSON.stringify(validationErrors));
+            console.log(JSON.stringify(validationErrors));
             if (!isWip && validationErrors.length > 0) {
                 const validationErrorHandler = new ValidationErrorHandler(client, contextPullRequest);
                 yield validationErrorHandler.handleValidationError(action, validationErrors);
