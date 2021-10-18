@@ -1,5 +1,13 @@
 # Changelog
 
+### [1.0.3-alpha.4](https://github.com/roseline124/pr-title-convention/compare/v1.0.3-alpha.3...v1.0.3-alpha.4) (2021-10-18)
+
+
+### Bug Fixes
+
+* add debug tool ([05d801a](https://github.com/roseline124/pr-title-convention/commit/05d801a94b00e2d4b10fc6c93fa6040188b2268c))
+* sdfsdf ([234bbb5](https://github.com/roseline124/pr-title-convention/commit/234bbb5cea00c32cbeabb09c3d1dd52614a0683c))
+
 ### [1.0.3-alpha.3](https://github.com/roseline124/pr-title-convention/compare/v1.0.3-alpha.2...v1.0.3-alpha.3) (2021-10-18)
 
 
