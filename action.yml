@@ -1,11 +1,12 @@
-name: semantic-pull-request
+name: @roseline124/semantic-pull-request
 author: Roseline124 <guseod24@gmail.com>
-description: Ensure your PR title matches the Conventional Commits spec (https://www.conventionalcommits.org/).
+
+description: Ensure your PR title matches the Conventional Commits spec(https://www.conventionalcommits.org/) by comment or fix. This repo is forked from @amannn/action-semantic-pull-request.
 runs:
   using: 'node12'
   main: 'dist/index.js'
 branding:
-  icon: 'shield'
+  icon: 'edit'
   color: 'green'
 inputs:
   types:
@@ -28,7 +29,4 @@ inputs:
     required: false
   action:
     description: "The way to validate your pr title. default is 'comment'"
-    required: false
-  includeBranchNameToSubject:
-    description: 'Include branch name to subject. E.g. type(scope): [branch] subject'
     required: false
