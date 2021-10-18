@@ -24,6 +24,19 @@ export async function run() {
       includeBranchNameToSubject,
     } = parseConfig();
 
+    core.debug(
+      JSON.stringify({
+        types,
+        scopes,
+        wip,
+        subjectPattern,
+        subjectPatternError,
+        validateSingleCommit,
+        action,
+        includeBranchNameToSubject,
+      })
+    );
+
     const contextPullRequest = github.context.payload.pull_request;
     if (!contextPullRequest) {
       throw new Error(
@@ -112,6 +125,7 @@ export async function run() {
       });
     }
 
+    core.debug(JSON.stringify({ validationErrors }));
     if (!isWip && validationErrors.length > 0) {
       const validationErrorHandler = new ValidationErrorHandler(client, contextPullRequest);
       await validationErrorHandler.handleValidationError(action, validationErrors);
