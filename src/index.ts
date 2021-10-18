@@ -1,5 +1,7 @@
 import core from '@actions/core';
 import github from '@actions/github';
+import { ErrorType, ValidationError } from './errors';
+import { ValidationErrorHandler } from './ValidationErrorHandler';
 import { parseConfig } from './parseConfig';
 import { validatePrTitle } from './validatePrTitle';
 
@@ -18,6 +20,8 @@ module.exports = async function run() {
       subjectPattern,
       subjectPatternError,
       validateSingleCommit,
+      action,
+      includeBranchNameToSubject,
     } = parseConfig();
 
     const contextPullRequest = github.context.payload.pull_request;
@@ -43,15 +47,17 @@ module.exports = async function run() {
     // Pull requests that start with "[WIP] " are excluded from the check.
     const isWip = wip && /^\[WIP\]\s/.test(pullRequest.title);
 
-    let validationError;
+    let validationErrors: ValidationError[] = [];
     if (!isWip) {
       try {
-        await validatePrTitle(pullRequest.title, {
+        const errors = await validatePrTitle(pullRequest.title, {
           types,
           scopes,
           subjectPattern,
           subjectPatternError,
+          action,
         });
+        validationErrors = errors;
 
         if (validateSingleCommit) {
           const { data: commits } = await client.pulls.listCommits({
@@ -68,21 +74,24 @@ module.exports = async function run() {
                 scopes,
                 subjectPattern,
                 subjectPatternError,
+                action,
               });
-            } catch (error) {
-              throw new Error(
-                `Pull request has only one commit and it's not semantic; this may lead to a non-semantic commit in the base branch (see https://github.community/t/how-to-change-the-default-squash-merge-commit-message/1155). Amend the commit message to match the pull request title, or add another commit.`
+            } catch (error: any) {
+              throw new ValidationError(
+                `Pull request has only one commit and it's not semantic; this may lead to a non-semantic commit in the base branch (see https://github.community/t/how-to-change-the-default-squash-merge-commit-message/1155). Amend the commit message to match the pull request title, or add another commit.`,
+                ErrorType.SINGLE_COMMIT_ERROR,
+                error.info
               );
             }
           }
         }
-      } catch (error) {
-        validationError = error;
+      } catch (error: any) {
+        validationErrors.push(error);
       }
     }
 
     if (wip) {
-      const newStatus = isWip || validationError != null ? 'pending' : 'success';
+      const newStatus = isWip || validationErrors.length > 0 ? 'pending' : 'success';
 
       // When setting the status to "pending", the checks don't
       // complete. This can be used for WIP PRs in repositories
@@ -93,18 +102,19 @@ module.exports = async function run() {
         repo,
         sha: pullRequest.head.sha,
         state: newStatus,
-        target_url: 'https://github.com/amannn/action-semantic-pull-request',
+        target_url: 'https://github.com/roseline124/action-semantic-pull-request',
         description: isWip
           ? 'This PR is marked with "[WIP]".'
-          : validationError
+          : validationErrors.length > 0
           ? 'PR title validation failed'
           : 'Ready for review & merge.',
         context: 'action-semantic-pull-request',
       });
     }
 
-    if (!isWip && validationError) {
-      throw validationError;
+    if (!isWip && validationErrors.length > 0) {
+      const validationErrorHandler = new ValidationErrorHandler(client, contextPullRequest);
+      await validationErrorHandler.handleValidationError(action, validationErrors);
     }
   } catch (error: any) {
     core.setFailed(error.message);

@@ -36,6 +36,18 @@ export function parseConfig() {
     validateSingleCommit = ConfigParser.parseBoolean(process.env.INPUT_VALIDATESINGLECOMMIT);
   }
 
+  let action;
+  if (process.env.INPUT_ACTION) {
+    action = ConfigParser.parseEnum(process.env.INPUT_ACTION);
+  }
+
+  let includeBranchNameToSubject;
+  if (process.env.INPUT_INCLUDEBRANCHNAMETOSUBJECT) {
+    includeBranchNameToSubject = ConfigParser.parseBoolean(
+      process.env.INPUT_INCLUDEBRANCHNAMETOSUBJECT
+    );
+  }
+
   return {
     types,
     scopes,
@@ -44,5 +56,7 @@ export function parseConfig() {
     subjectPattern,
     subjectPatternError,
     validateSingleCommit,
+    action,
+    includeBranchNameToSubject,
   };
 }

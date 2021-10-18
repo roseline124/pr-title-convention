@@ -1,5 +1,6 @@
 const conventionalCommitTypes = require('conventional-commit-types');
 import is from '@sindresorhus/is';
+import { tryCatch, always } from 'ramda';
 import { sync as parser } from './parser';
 import { formatMessage } from './formatMessage';
 import { getPaserOptions } from './parser/parserOptions';
@@ -19,9 +20,35 @@ export const validatePrTitle = async (prTitle: string, options?: ValidationOptio
   const parserOpts = getPaserOptions();
   const result = parser(prTitle, parserOpts);
 
-  validateType(prTitle, result.type, options?.types);
-  validateScope(prTitle, result.scope, options?.scopes);
-  validateSubject(prTitle, result.subject, options);
+  let errors: ValidationError[] = [];
+  /** errors 참조 못하는 버그 수정 */
+  const typeError = tryCatch<() => void, ValidationError, ValidationError>(
+    () => validateType(prTitle, result.type, options?.types),
+    (error) => always(error)()
+  )();
+  if (typeError) {
+    errors.push(typeError);
+  }
+  const scopeError = tryCatch<() => void, ValidationError, ValidationError>(
+    () => validateScope(prTitle, result.scope, options?.scopes),
+    (error) => always(error)()
+  )();
+  if (scopeError) {
+    errors.push(scopeError);
+  }
+  const subjectError = tryCatch<() => void, ValidationError, ValidationError>(
+    () => validateSubject(prTitle, result.subject, options),
+    (error) => always(error)()
+  )();
+  if (subjectError) {
+    errors.push(subjectError);
+  }
+
+  return errors;
+
+  function deferError(error: ValidationError) {
+    errors.push(error);
+  }
 };
 
 function validateType(prTitle: string, prType: string, types?: string[]) {
@@ -35,7 +62,7 @@ function validateType(prTitle: string, prType: string, types?: string[]) {
         types
       )}\n\n${printAvailableTypes()}`,
       ErrorType.TYPE_ERROR,
-      { types, type: prType }
+      { errorWord: prType, availableWords: types }
     );
   }
 
@@ -64,7 +91,7 @@ function validateScope(prTitle: string, scope?: string, scopes?: string[]) {
         scopes
       )}Use one of the available scopes: ${scopes.join(', ')}.`,
       ErrorType.SCOPE_ERROR,
-      { scopes, scope }
+      { errorWord: scope, availableWords: scopes }
     );
   }
 }
@@ -102,6 +129,7 @@ function validateSubject(prTitle: string, subject?: string, options?: Validation
     if (options?.subjectPatternError) {
       message = formatMessage(options.subjectPatternError, {
         subject,
+        subjectPattern: options?.subjectPattern,
         title: prTitle,
       });
     }

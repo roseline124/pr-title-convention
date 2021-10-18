@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ValidationErrorHandler comment 발생한 모든 에러의 메시지를 담아 comment를 추가한다 1`] = `
+"💩 [PR Title Error Message] 
+type error
+scope error
+subject error"
+`;

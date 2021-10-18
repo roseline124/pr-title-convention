@@ -27,7 +27,9 @@
     "@actions/github": "^4.0.0",
     "@sindresorhus/is": "^4.2.0",
     "@types/lodash": "^4.14.175",
-    "conventional-commit-types": "^3.0.0"
+    "conventional-commit-types": "^3.0.0",
+    "didyoumean": "^1.2.2",
+    "ramda": "^0.27.1"
   },
   "devDependencies": {
     "@semantic-release/changelog": "5.0.1",
@@ -35,7 +37,9 @@
     "@semantic-release/git": "9.0.0",
     "@semantic-release/github": "7.2.0",
     "@semantic-release/release-notes-generator": "9.0.1",
+    "@types/didyoumean": "^1.2.0",
     "@types/jest": "^27.0.2",
+    "@types/ramda": "^0.27.45",
     "@vercel/ncc": "^0.27.0",
     "eslint": "7.9.0",
     "eslint-config-molindo": "5.0.1",
@@ -43,8 +47,5 @@
     "semantic-release": "17.3.0",
     "ts-jest": "^27.0.7",
     "typescript": "^4.4.4"
-  },
-  "engines": {
-    "node": "^12.0.0"
   }
 }

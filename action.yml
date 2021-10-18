@@ -26,3 +26,9 @@ inputs:
   validateSingleCommit:
     description: 'When using "Squash and merge" on a PR with only one commit, GitHub will suggest using that commit message instead of the PR title for the merge commit, and it''s easy to commit this by mistake. Enable this option to also validate the commit message for one commit PRs.'
     required: false
+  action:
+    description: "The way to validate your pr title. default is 'comment'"
+    required: false
+  includeBranchNameToSubject:
+    description: 'Include branch name to subject. E.g. type(scope): [branch] subject'
+    required: false
